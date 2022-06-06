@@ -20,6 +20,14 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/', async () => {
-    return { hello: 'world' }
+// Dashboard API
+Route.group(async () => {
+    Route.group(() => {
+        Route.get('/', 'ProductsController.index')
+        Route.post('/', 'ProductsController.create')
+        Route.put('/:id', 'ProductsController.update')
+        Route.delete('/:id', 'ProductsController.delete')
+    }).prefix('/products')
 })
+    .prefix('/dashboard')
+    .middleware('detectUserLocale')
