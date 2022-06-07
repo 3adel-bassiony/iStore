@@ -28,6 +28,14 @@ Route.group(async () => {
         Route.put('/:id', 'ProductsController.update')
         Route.delete('/:id', 'ProductsController.delete')
     }).prefix('/products')
+
+    // Brands
+    Route.group(() => {
+        Route.get('/', 'BrandsController.index')
+        Route.post('/', 'BrandsController.create')
+        Route.put('/:id', 'BrandsController.update')
+        Route.delete('/:id', 'BrandsController.delete')
+    }).prefix('/brands')
 })
     .prefix('/dashboard')
     .middleware('detectUserLocale')

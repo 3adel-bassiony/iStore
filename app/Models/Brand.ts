@@ -6,13 +6,13 @@ import {
     beforeFetch,
     ModelQueryBuilderContract,
     beforePaginate,
-    belongsTo,
-    BelongsTo,
+    hasMany,
+    HasMany,
 } from '@ioc:Adonis/Lucid/Orm'
-import { ProductStatus } from 'App/Enums/ProductStatus'
-import Brand from './Brand'
+import { BrandStatus } from 'App/Enums/BrandStatus'
+import Product from './Product'
 
-export default class Product extends BaseModel {
+export default class Brand extends BaseModel {
     @column({ isPrimary: true })
     public id: number
 
@@ -20,37 +20,16 @@ export default class Product extends BaseModel {
     public slug: string
 
     @column()
-    public title: string
+    public name: string
 
     @column()
     public description: string
 
     @column()
-    public price: number
-
-    @column()
-    public cost_price: number
-
-    @column()
-    public special_price: number
-
-    @column()
     public thumbnail: string | null
 
     @column()
-    public sku: string
-
-    @column()
-    public barcode: string
-
-    @column()
-    public quantity: number
-
-    @column()
-    public model: string
-
-    @column()
-    public status: ProductStatus
+    public status: BrandStatus
 
     @column()
     public seoTitle: string
@@ -62,9 +41,6 @@ export default class Product extends BaseModel {
     public seoKeywords: string
 
     @column.dateTime({ autoCreate: true })
-    public publishedAt: DateTime
-
-    @column.dateTime({ autoCreate: true })
     public createdAt: DateTime
 
     @column.dateTime({ autoCreate: true, autoUpdate: true })
@@ -73,19 +49,19 @@ export default class Product extends BaseModel {
     @column.dateTime({ serializeAs: null })
     public deletedAt: DateTime
 
-    @belongsTo(() => Brand)
-    public brand: BelongsTo<typeof Brand>
+    @hasMany(() => Product)
+    public products: HasMany<typeof Product>
 
     @beforeFind()
     @beforeFetch()
-    public static ignoreDeleted = (query: ModelQueryBuilderContract<typeof Product>) => {
+    public static ignoreDeleted = (query: ModelQueryBuilderContract<typeof Brand>) => {
         query.whereNull('deleted_at')
     }
 
     @beforePaginate()
     public static updatePagination([countQuery, query]: [
-        ModelQueryBuilderContract<typeof Product>,
-        ModelQueryBuilderContract<typeof Product>
+        ModelQueryBuilderContract<typeof Brand>,
+        ModelQueryBuilderContract<typeof Brand>
     ]) {
         query.whereNull('deleted_at')
         countQuery.whereNull('deleted_at')

@@ -13,6 +13,7 @@ export default class ProductsController {
 
     public async create({ request, response }: HttpContextContract) {
         const productSchema = schema.create({
+            brand_id: schema.number.optional([rules.exists({ table: 'brands', column: 'id' })]),
             slug: schema.string({}, [rules.unique({ table: 'products', column: 'slug' })]),
             title: schema.string(),
             description: schema.string.optional(),
@@ -51,6 +52,7 @@ export default class ProductsController {
             return response.notFound({ error: i18n.formatMessage('product.Product_Not_Found') })
 
         const productSchema = schema.create({
+            brand_id: schema.number.optional([rules.exists({ table: 'brands', column: 'id' })]),
             slug: schema.string.optional({}, [rules.unique({ table: 'products', column: 'slug' })]),
             title: schema.string.optional(),
             description: schema.string.optional(),
