@@ -8,6 +8,7 @@ import {
     beforePaginate,
     belongsTo,
     BelongsTo,
+    beforeSave,
 } from '@ioc:Adonis/Lucid/Orm'
 import { ProductStatus } from 'App/Enums/ProductStatus'
 import Brand from './Brand'
@@ -52,6 +53,13 @@ export default class Product extends BaseModel {
     @column()
     public status: ProductStatus
 
+    @column({
+        serialize: (value: string | null) => {
+            return !Array.isArray(value) ? JSON.parse(value ?? '[]') : value
+        },
+    })
+    public attachments: string[] | string
+
     @column()
     public seoTitle: string
 
@@ -89,5 +97,10 @@ export default class Product extends BaseModel {
     ]) {
         query.whereNull('deleted_at')
         countQuery.whereNull('deleted_at')
+    }
+
+    @beforeSave()
+    public static async stringifyAttachments(product: Product) {
+        product.attachments = await JSON.stringify(product.attachments)
     }
 }

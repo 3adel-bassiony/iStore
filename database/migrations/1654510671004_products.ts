@@ -24,6 +24,7 @@ export default class extends BaseSchema {
                 enumName: 'product_status',
                 existingType: false,
             })
+            table.jsonb('attachments')
             table.string('seo_title')
             table.string('seo_description')
             table.string('seo_keywords')

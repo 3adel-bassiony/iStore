@@ -22,9 +22,12 @@ import Route from '@ioc:Adonis/Core/Route'
 
 // Dashboard API
 Route.group(async () => {
+    Route.post('/upload', 'AttachmentsController.create')
+
     Route.group(() => {
         Route.get('/', 'ProductsController.index')
         Route.post('/', 'ProductsController.create')
+        Route.get('/:id', 'ProductsController.show')
         Route.put('/:id', 'ProductsController.update')
         Route.delete('/:id', 'ProductsController.delete')
     }).prefix('/products')

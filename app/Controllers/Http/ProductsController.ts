@@ -6,9 +6,19 @@ import Product from '../../Models/Product'
 import { ProductStatus } from '../../Enums/ProductStatus'
 
 export default class ProductsController {
-    public async index({}: HttpContextContract) {
-        const products = await Product.all()
-        return products
+    public async index({ request }: HttpContextContract) {
+        const products = await Product.query()
+            .orderBy('created_at', request.qs().order_by ?? 'desc')
+            .paginate(request.qs().page ?? 1, request.qs().per_page ?? 5)
+
+        const paginationJSON = products.serialize()
+
+        return paginationJSON
+    }
+
+    public async show({ params }: HttpContextContract) {
+        const product = await Product.find(params.id)
+        return product?.serialize()
     }
 
     public async create({ request, response }: HttpContextContract) {
@@ -30,6 +40,9 @@ export default class ProductsController {
             seo_description: schema.string.optional(),
             seo_keywords: schema.string.optional(),
             published_at: schema.date.optional(),
+            attachments: schema.array
+                .optional([rules.minLength(1), rules.maxLength(5)])
+                .members(schema.string()),
         })
 
         try {
@@ -39,7 +52,7 @@ export default class ProductsController {
 
             const product = await Product.create(payload)
 
-            return product
+            return product.serialize()
         } catch (error) {
             return response.badRequest(error.messages)
         }
