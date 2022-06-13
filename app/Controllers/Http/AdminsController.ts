@@ -21,6 +21,7 @@ export default class AdminsController {
                 rules.unique({ table: 'users', column: 'username', caseInsensitive: true }),
             ]),
             email: schema.string({}, [
+                rules.email(),
                 rules.unique({ table: 'users', column: 'email', caseInsensitive: true }),
             ]),
             phone: schema.string({}, [
@@ -31,7 +32,7 @@ export default class AdminsController {
             password: schema.string({}, [rules.minLength(8)]),
             gender: schema.enum(['male', 'female'] as const),
             role: schema.enum(Object.values(UserRole)),
-            avatar: schema.string.optional({}, [rules.minLength(20)]),
+            avatar: schema.string.optional({}, [rules.url()]),
         })
 
         try {
@@ -80,15 +81,38 @@ export default class AdminsController {
         const userSchema = schema.create({
             name: schema.string.optional(),
             username: schema.string.optional({}, [
-                rules.unique({ table: 'users', column: 'username', caseInsensitive: true }),
+                rules.unique({
+                    table: 'users',
+                    column: 'username',
+                    whereNot: {
+                        id: params.id,
+                    },
+                    caseInsensitive: true,
+                }),
             ]),
             email: schema.string.optional({}, [
-                rules.unique({ table: 'users', column: 'email', caseInsensitive: true }),
+                rules.email(),
+                rules.unique({
+                    table: 'users',
+                    column: 'email',
+                    whereNot: {
+                        id: params.id,
+                    },
+                    caseInsensitive: true,
+                }),
             ]),
-            phone: schema.string.optional({}, [rules.unique({ table: 'users', column: 'phone' })]),
+            phone: schema.string.optional({}, [
+                rules.unique({
+                    table: 'users',
+                    column: 'phone',
+                    whereNot: {
+                        id: params.id,
+                    },
+                }),
+            ]),
             gender: schema.enum.optional(['male', 'female'] as const),
             role: schema.enum.optional(Object.values(UserRole)),
-            avatar: schema.string.optional({}, [rules.minLength(20)]),
+            avatar: schema.string.optional({}, [rules.url()]),
         })
 
         try {
