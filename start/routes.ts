@@ -22,23 +22,34 @@ import Route from '@ioc:Adonis/Core/Route'
 
 // Dashboard API
 Route.group(async () => {
-    Route.post('/upload', 'AttachmentsController.create')
+    // Auth
+    Route.group(() => {
+        Route.post('/login', 'AuthController.login')
+        Route.post('/logout', 'AuthController.logout')
+        Route.post('/forgot-password', 'AuthController.forgotPassword')
+        Route.post('/reset-password/:email', 'AuthController.resetPassword')
+        Route.get('/verify/:email', 'AuthController.verifyEmail')
+    }).prefix('auth')
 
     Route.group(() => {
-        Route.get('/', 'ProductsController.index')
-        Route.post('/', 'ProductsController.create')
-        Route.get('/:id', 'ProductsController.show')
-        Route.put('/:id', 'ProductsController.update')
-        Route.delete('/:id', 'ProductsController.delete')
-    }).prefix('/products')
+        Route.post('/upload', 'AttachmentsController.create')
 
-    // Brands
-    Route.group(() => {
-        Route.get('/', 'BrandsController.index')
-        Route.post('/', 'BrandsController.create')
-        Route.put('/:id', 'BrandsController.update')
-        Route.delete('/:id', 'BrandsController.delete')
-    }).prefix('/brands')
+        Route.group(() => {
+            Route.get('/', 'ProductsController.index')
+            Route.post('/', 'ProductsController.create')
+            Route.get('/:id', 'ProductsController.show')
+            Route.put('/:id', 'ProductsController.update')
+            Route.delete('/:id', 'ProductsController.delete')
+        }).prefix('/products')
+
+        // Brands
+        Route.group(() => {
+            Route.get('/', 'BrandsController.index')
+            Route.post('/', 'BrandsController.create')
+            Route.put('/:id', 'BrandsController.update')
+            Route.delete('/:id', 'BrandsController.delete')
+        }).prefix('/brands')
+    }).middleware('auth:api')
 })
     .prefix('/dashboard')
     .middleware('detectUserLocale')
