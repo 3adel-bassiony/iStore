@@ -34,6 +34,15 @@ Route.group(async () => {
     Route.group(() => {
         Route.post('/upload', 'AttachmentsController.create')
 
+        // Admins
+        Route.group(() => {
+            Route.get('/', 'AdminsController.index')
+            Route.post('/', 'AdminsController.create')
+            Route.get('/:id', 'AdminsController.show')
+            Route.put('/:id', 'AdminsController.update')
+            Route.delete('/:id', 'AdminsController.delete')
+        }).prefix('/admins')
+
         Route.group(() => {
             Route.get('/', 'ProductsController.index')
             Route.post('/', 'ProductsController.create')
