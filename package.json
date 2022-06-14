@@ -58,6 +58,7 @@
         "@adonisjs/lucid": "^18.0.1",
         "@adonisjs/mail": "^8.1.2",
         "@adonisjs/repl": "^3.1.11",
+        "@adonisjs/view": "^6.1.5",
         "luxon": "^2.4.0",
         "pg": "^8.7.3",
         "phc-argon2": "^1.1.3",

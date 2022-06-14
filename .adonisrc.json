@@ -24,7 +24,8 @@
         "@adonisjs/lucid",
         "@adonisjs/i18n",
         "@adonisjs/auth",
-        "@adonisjs/mail"
+        "@adonisjs/mail",
+        "@adonisjs/view"
     ],
     "aceProviders": [
         "@adonisjs/repl"
@@ -44,6 +45,10 @@
         "@japa/preset-adonis/TestsProvider"
     ],
     "metaFiles": [
-        "resources/lang/**/*.(json|yaml)"
+        "resources/lang/**/*.(json|yaml)",
+        {
+            "pattern": "resources/views/**/*.edge",
+            "reloadServer": false
+        }
     ]
 }

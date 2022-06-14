@@ -24,11 +24,11 @@ import Route from '@ioc:Adonis/Core/Route'
 Route.group(async () => {
     // Auth
     Route.group(() => {
-        Route.post('/login', 'AuthController.login')
-        Route.post('/logout', 'AuthController.logout')
-        Route.post('/forgot-password', 'AuthController.forgotPassword')
-        Route.post('/reset-password/:email', 'AuthController.resetPassword')
-        Route.get('/verify/:email', 'AuthController.verifyEmail')
+        Route.post('/login', 'AuthController.login').as('login')
+        Route.post('/logout', 'AuthController.logout').as('logout')
+        Route.post('/forgot-password', 'AuthController.forgotPassword').as('forgotPassword')
+        Route.post('/reset-password/:email', 'AuthController.resetPassword').as('resetPassword')
+        Route.get('/verify/:email', 'AuthController.verifyEmail').as('verifyEmail')
     }).prefix('auth')
 
     Route.group(() => {
@@ -42,6 +42,15 @@ Route.group(async () => {
             Route.put('/:id', 'AdminsController.update')
             Route.delete('/:id', 'AdminsController.delete')
         }).prefix('/admins')
+
+        // Customers
+        Route.group(() => {
+            Route.get('/', 'CustomersController.index')
+            Route.post('/', 'CustomersController.create')
+            Route.get('/:id', 'CustomersController.show')
+            Route.put('/:id', 'CustomersController.update')
+            Route.delete('/:id', 'CustomersController.delete')
+        }).prefix('/customers')
 
         Route.group(() => {
             Route.get('/', 'ProductsController.index')

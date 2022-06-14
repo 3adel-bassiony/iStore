@@ -18,11 +18,13 @@ export default class UsersSchema extends BaseSchema {
             table.string('company', 6).nullable()
             table.boolean('is_verified').nullable()
             table.boolean('is_active').nullable()
-            table.enu('role', Object.values(UserRole), {
-                useNative: true,
-                enumName: 'user_role',
-                existingType: false,
-            })
+            table
+                .enu('role', Object.values(UserRole), {
+                    useNative: true,
+                    enumName: 'user_role',
+                    existingType: false,
+                })
+                .defaultTo(UserRole.Customer)
             table.timestamp('created_at', { useTz: true }).notNullable()
             table.timestamp('updated_at', { useTz: true }).notNullable()
             table.timestamp('deleted_at').defaultTo(null)
