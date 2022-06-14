@@ -51,7 +51,7 @@ export default class AdminsController {
                         .from('info@example.com')
                         .to(request.input('email'))
                         .subject('Verify Your Email')
-                        .htmlView('emails/welcome', {
+                        .htmlView('emails/verify_email', {
                             url: `${process.env.APP_URL}${signedUrl}`,
                         })
                 })
