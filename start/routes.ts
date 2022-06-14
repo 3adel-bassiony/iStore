@@ -41,7 +41,9 @@ Route.group(async () => {
             Route.get('/:id', 'AdminsController.show')
             Route.put('/:id', 'AdminsController.update')
             Route.delete('/:id', 'AdminsController.delete')
-        }).prefix('/admins')
+        })
+            .prefix('/admins')
+            .middleware('adminRole:Owner,Admin')
 
         // Customers
         Route.group(() => {
