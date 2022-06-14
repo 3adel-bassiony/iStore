@@ -2,8 +2,8 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 
 import { DateTime } from 'luxon'
-import Product from '../../Models/Product'
-import { ProductStatus } from '../../Enums/ProductStatus'
+import Product from '../../../Models/Product'
+import { ProductStatus } from '../../../Enums/ProductStatus'
 
 export default class ProductsController {
     public async index({ request }: HttpContextContract) {

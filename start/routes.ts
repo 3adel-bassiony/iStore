@@ -20,6 +20,8 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
+Route.post('/upload', 'AttachmentsController.create')
+
 // Dashboard API
 Route.group(async () => {
     // Auth
@@ -32,8 +34,6 @@ Route.group(async () => {
     }).prefix('auth')
 
     Route.group(() => {
-        Route.post('/upload', 'AttachmentsController.create')
-
         // Admins
         Route.group(() => {
             Route.get('/', 'AdminsController.index')
@@ -72,4 +72,5 @@ Route.group(async () => {
     }).middleware('auth:api')
 })
     .prefix('/dashboard')
+    .namespace('App/Controllers/Http/Dashboard')
     .middleware('detectUserLocale')
