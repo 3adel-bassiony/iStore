@@ -97,7 +97,7 @@ export default class AuthController {
 
         if (!user) return response.badRequest({ error: i18n.formatMessage('auth.Email_Not_Exist') })
 
-        const signedUrl = await Route.makeSignedUrl('resetPassword', { email, expiresIn: '60m' })
+        // const signedUrl = await Route.makeSignedUrl('resetPassword', { email, expiresIn: '60m' })
 
         // await Mail.sendLater((message) => {
         //     message

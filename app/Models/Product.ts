@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import {
     BaseModel,
     column,
+    computed,
     beforeFind,
     beforeFetch,
     ModelQueryBuilderContract,
@@ -9,9 +10,12 @@ import {
     belongsTo,
     BelongsTo,
     beforeSave,
+    manyToMany,
+    ManyToMany,
 } from '@ioc:Adonis/Lucid/Orm'
 import { ProductStatus } from 'App/Enums/ProductStatus'
 import Brand from './Brand'
+import Collection from './Collection'
 
 export default class Product extends BaseModel {
     @column({ isPrimary: true })
@@ -81,13 +85,20 @@ export default class Product extends BaseModel {
     @column.dateTime({ serializeAs: null })
     public deletedAt: DateTime
 
+    @computed()
+    public get collections_count(): number {
+        return Number(this.$extras.collections_count ?? 0)
+    }
+
     @belongsTo(() => Brand)
     public brand: BelongsTo<typeof Brand>
 
     @beforeFind()
     @beforeFetch()
     public static ignoreDeleted = (query: ModelQueryBuilderContract<typeof Product>) => {
-        query.whereNull('deleted_at')
+        query
+            .whereNull('deleted_at')
+            .withCount('collections', (query) => query.as('collections_count'))
     }
 
     @beforePaginate()
@@ -103,4 +114,7 @@ export default class Product extends BaseModel {
     public static async stringifyAttachments(product: Product) {
         product.attachments = await JSON.stringify(product.attachments)
     }
+
+    @manyToMany(() => Collection)
+    public collections: ManyToMany<typeof Collection>
 }

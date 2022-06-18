@@ -11,20 +11,30 @@ export default class ProductsController {
             .orderBy('created_at', request.qs().order_by ?? 'desc')
             .paginate(request.qs().page ?? 1, request.qs().per_page ?? 5)
 
-        const paginationJSON = products.serialize()
-
-        return paginationJSON
+        return products
     }
 
-    public async show({ params }: HttpContextContract) {
+    public async show({ response, params }: HttpContextContract) {
         const product = await Product.find(params.id)
+
+        if (!product) return response.status(404).send({ error: 'product.Product_Not_Found' })
+
         return product?.serialize()
     }
 
     public async create({ request, response }: HttpContextContract) {
         const productSchema = schema.create({
             brand_id: schema.number.optional([rules.exists({ table: 'brands', column: 'id' })]),
-            slug: schema.string({}, [rules.unique({ table: 'products', column: 'slug' })]),
+            slug: schema.string({}, [
+                rules.unique({
+                    table: 'products',
+                    column: 'slug',
+                    where: {
+                        deleted_at: null,
+                    },
+                    caseInsensitive: true,
+                }),
+            ]),
             title: schema.string(),
             description: schema.string.optional(),
             price: schema.number([rules.range(10, 1000000)]),
@@ -43,6 +53,9 @@ export default class ProductsController {
             attachments: schema.array
                 .optional([rules.minLength(1), rules.maxLength(5)])
                 .members(schema.string()),
+            collections: schema.array
+                .optional([rules.minLength(1)])
+                .members(schema.number([rules.exists({ table: 'collections', column: 'id' })])),
         })
 
         try {
@@ -51,6 +64,7 @@ export default class ProductsController {
             })
 
             const product = await Product.create(payload)
+            product.related('collections').attach(payload.collections ?? [])
 
             return product.serialize()
         } catch (error) {
@@ -66,7 +80,19 @@ export default class ProductsController {
 
         const productSchema = schema.create({
             brand_id: schema.number.optional([rules.exists({ table: 'brands', column: 'id' })]),
-            slug: schema.string.optional({}, [rules.unique({ table: 'products', column: 'slug' })]),
+            slug: schema.string.optional({}, [
+                rules.unique({
+                    table: 'products',
+                    column: 'slug',
+                    where: {
+                        deleted_at: null,
+                    },
+                    whereNot: {
+                        id: params.id,
+                    },
+                    caseInsensitive: true,
+                }),
+            ]),
             title: schema.string.optional(),
             description: schema.string.optional(),
             price: schema.number([rules.range(10, 1000000)]),
@@ -82,6 +108,12 @@ export default class ProductsController {
             seo_description: schema.string.optional(),
             seo_keywords: schema.string.optional(),
             published_at: schema.date.optional(),
+            attachments: schema.array
+                .optional([rules.minLength(1), rules.maxLength(5)])
+                .members(schema.string()),
+            collections_ids: schema.array
+                .optional([rules.minLength(1)])
+                .members(schema.number([rules.exists({ table: 'collections', column: 'id' })])),
         })
 
         try {
@@ -90,6 +122,8 @@ export default class ProductsController {
             })
 
             await product.merge(payload).save()
+
+            product.related('collections').sync(payload.collections_ids ?? [])
 
             return product
         } catch (error) {
@@ -102,6 +136,8 @@ export default class ProductsController {
         if (!product) return response.status(404).send({ error: 'product.Product_Not_Found' })
 
         await product.merge({ deletedAt: DateTime.now() }).save()
+        product.related('collections').detach()
+
         return response.status(200).send({
             message: i18n.formatMessage('common.Delete_Product_Success', {
                 id: params.id,
