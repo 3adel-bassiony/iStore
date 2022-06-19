@@ -17,7 +17,7 @@ export default class ProductsController {
     public async show({ response, params }: HttpContextContract) {
         const product = await Product.find(params.id)
 
-        if (!product) return response.status(404).send({ error: 'product.Product_Not_Found' })
+        if (!product) return response.status(404).send({ error: 'products.Product_Not_Found' })
 
         return product?.serialize()
     }
@@ -76,7 +76,7 @@ export default class ProductsController {
         const product = await Product.find(params.id)
 
         if (!product)
-            return response.notFound({ error: i18n.formatMessage('product.Product_Not_Found') })
+            return response.notFound({ error: i18n.formatMessage('products.Product_Not_Found') })
 
         const productSchema = schema.create({
             brand_id: schema.number.optional([rules.exists({ table: 'brands', column: 'id' })]),
@@ -133,13 +133,13 @@ export default class ProductsController {
 
     public async delete({ response, params, i18n }: HttpContextContract) {
         const product = await Product.find(params.id)
-        if (!product) return response.status(404).send({ error: 'product.Product_Not_Found' })
+        if (!product) return response.status(404).send({ error: 'products.Product_Not_Found' })
 
         await product.merge({ deletedAt: DateTime.now() }).save()
         product.related('collections').detach()
 
         return response.status(200).send({
-            message: i18n.formatMessage('common.Delete_Product_Success', {
+            message: i18n.formatMessage('products.Product_Deleted_Successfully', {
                 id: params.id,
             }),
         })

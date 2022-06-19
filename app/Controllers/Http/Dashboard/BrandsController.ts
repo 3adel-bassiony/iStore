@@ -14,6 +14,13 @@ export default class BrandsController {
         return brands
     }
 
+    public async show({ response, params, i18n }) {
+        const brand = Brand.find(params.id)
+        if (!brand)
+            return response.notFound({ error: i18n.formatMessage('brands.Brand_Not_Found') })
+        return brand
+    }
+
     public async create({ request, response }: HttpContextContract) {
         const brandSchema = schema.create({
             slug: schema.string({}, [rules.unique({ table: 'brands', column: 'slug' })]),
@@ -75,7 +82,7 @@ export default class BrandsController {
 
         await brand.merge({ deletedAt: DateTime.now() }).save()
         return response.status(200).send({
-            message: i18n.formatMessage('brand.Delete_Brand_Success', {
+            message: i18n.formatMessage('brand.Brand_Deleted_Successfully', {
                 id: params.id,
             }),
         })

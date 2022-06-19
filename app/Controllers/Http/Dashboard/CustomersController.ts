@@ -20,7 +20,8 @@ export default class CustomersController {
             .where('role', UserRole.Customer)
             .preload('addresses')
             .first()
-        if (!user) return response.notFound({ error: i18n.formatMessage('user.User_Not_Found') })
+        if (!user)
+            return response.notFound({ error: i18n.formatMessage('users.Customer_Not_Found') })
         return user
     }
 
@@ -74,7 +75,9 @@ export default class CustomersController {
         const user = await User.find(params.id)
 
         if (!user)
-            return response.status(404).send({ error: i18n.formatMessage('user.User_Not_Found') })
+            return response
+                .status(404)
+                .send({ error: i18n.formatMessage('users.Customer_Not_Found') })
 
         const userSchema = schema.create({
             name: schema.string.optional(),
@@ -127,11 +130,13 @@ export default class CustomersController {
         const user = await User.find(params.id)
 
         if (!user)
-            return response.status(404).send({ error: i18n.formatMessage('user.User_Not_Found') })
+            return response
+                .status(404)
+                .send({ error: i18n.formatMessage('users.Customer_Not_Found') })
 
         await user.merge({ deletedAt: DateTime.now() }).save()
         return response.status(200).send({
-            message: i18n.formatMessage('user.User_Deleted_Successfully'),
+            message: i18n.formatMessage('users.Customer_Deleted_Successfully'),
         })
     }
 }

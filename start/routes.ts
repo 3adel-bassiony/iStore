@@ -76,6 +76,7 @@ Route.group(async () => {
         Route.group(() => {
             Route.get('/', 'BrandsController.index')
             Route.post('/', 'BrandsController.create')
+            Route.get('/:id', 'BrandsController.show')
             Route.put('/:id', 'BrandsController.update')
             Route.delete('/:id', 'BrandsController.delete')
         }).prefix('/brands')

@@ -1,0 +1,8 @@
+{
+    "Admin_Permission_Denied": "Permission denied for this admin",
+    "Admin_Not_Found": "Admin not found",
+    "Admin_Deleted_Successfully": "Admin deleted successfully",
+    "Customer_Permission_Denied": "Permission denied for this customer",
+    "Customer_Not_Found": "Customer not found",
+    "Customer_Deleted_Successfully": "Customer deleted successfully"
+}

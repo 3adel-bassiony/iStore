@@ -1,0 +1,8 @@
+{
+    "Admin_Permission_Denied": "تم رفض الإذن لهذا المشرف",
+    "Admin_Not_Found": "المشرف غير موجود",
+    "Admin_Deleted_Successfully": "تم حذف المشرف بنجاح",
+    "Customer_Permission_Denied": "تم رفض الإذن لهذا العميل",
+    "Customer_Not_Found": "الزبون غير موجود",
+    "Customer_Deleted_Successfully": "تم حذف العميل بنجاح"
+}

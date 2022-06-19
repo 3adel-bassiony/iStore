@@ -59,7 +59,7 @@ export default class AdminsController {
             }
 
             return response.badRequest({
-                error: i18n.formatMessage('user.User_Permission_Denied'),
+                error: i18n.formatMessage('users.Admin_Permission_Denied'),
             })
         } catch (error) {
             response.badRequest(error.messages)
@@ -68,7 +68,7 @@ export default class AdminsController {
 
     public async show({ response, params, i18n }: HttpContextContract) {
         const user = await User.find(params.id)
-        if (!user) return response.notFound({ error: i18n.formatMessage('user.User_Not_Found') })
+        if (!user) return response.notFound({ error: i18n.formatMessage('users.Admin_Not_Found') })
         return user
     }
 
@@ -76,7 +76,7 @@ export default class AdminsController {
         const user = await User.find(params.id)
 
         if (!user)
-            return response.status(404).send({ error: i18n.formatMessage('user.User_Not_Found') })
+            return response.status(404).send({ error: i18n.formatMessage('users.Admin_Not_Found') })
 
         const userSchema = schema.create({
             name: schema.string.optional(),
@@ -127,7 +127,7 @@ export default class AdminsController {
             }
 
             return response.badRequest({
-                error: i18n.formatMessage('user.User_Permission_Denied'),
+                error: i18n.formatMessage('users.Admin_Permission_Denied'),
             })
         } catch (error) {
             response.badRequest(error.messages)
@@ -140,7 +140,7 @@ export default class AdminsController {
         const ownersCount = await User.query().count('role', UserRole.Owner)
 
         if (!user)
-            return response.status(404).send({ error: i18n.formatMessage('user.User_Not_Found') })
+            return response.status(404).send({ error: i18n.formatMessage('users.Admin_Not_Found') })
 
         if (
             (auth.user?.role === UserRole.Owner || auth.user?.role === UserRole.Admin) &&
@@ -149,12 +149,12 @@ export default class AdminsController {
         ) {
             await user.merge({ deletedAt: DateTime.now() }).save()
             return response.status(200).send({
-                message: i18n.formatMessage('user.User_Deleted_Successfully'),
+                message: i18n.formatMessage('users.Admin_Deleted_Successfully'),
             })
         }
 
         return response.badRequest({
-            message: i18n.formatMessage('user.User_Permission_Denied'),
+            message: i18n.formatMessage('users.Admin_Permission_Denied'),
         })
     }
 }

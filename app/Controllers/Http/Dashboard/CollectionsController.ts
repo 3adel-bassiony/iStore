@@ -17,7 +17,7 @@ export default class CollectionsController {
         const collection = await Collection.find(params.id)
 
         if (!collection)
-            return response.status(404).send({ error: 'collection.Collection_Not_Found' })
+            return response.status(404).send({ error: 'collections.Collection_Not_Found' })
 
         return collection
     }
@@ -66,7 +66,7 @@ export default class CollectionsController {
 
         if (!collection)
             return response.notFound({
-                error: i18n.formatMessage('collection.Collection_Not_Found'),
+                error: i18n.formatMessage('collections.Collection_Not_Found'),
             })
 
         const collectionSchema = schema.create({
@@ -113,13 +113,13 @@ export default class CollectionsController {
     public async delete({ response, params, i18n }: HttpContextContract) {
         const collection = await Collection.find(params.id)
         if (!collection)
-            return response.status(404).send({ error: 'collection.Collection_Not_Found' })
+            return response.status(404).send({ error: 'collections.Collection_Not_Found' })
 
         await collection.merge({ deletedAt: DateTime.now() }).save()
         collection.related('products').detach()
 
         return response.status(200).send({
-            message: i18n.formatMessage('common.Delete_Collection_Success', {
+            message: i18n.formatMessage('collections.Collection_Deleted_Successfully', {
                 id: params.id,
             }),
         })

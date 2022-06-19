@@ -7,7 +7,7 @@ export default class AddressesController {
     public async show({ response, params, i18n }: HttpContextContract) {
         const address = await Address.find(params.id)
         if (!address)
-            return response.notFound({ error: i18n.formatMessage('address.Address_Not_Found') })
+            return response.notFound({ error: i18n.formatMessage('addresses.Address_Not_Found') })
         return address
     }
 
@@ -45,7 +45,7 @@ export default class AddressesController {
         const address = await Address.find(params.id)
 
         if (!address)
-            return response.notFound({ error: i18n.formatMessage('address.Address_Not_Found') })
+            return response.notFound({ error: i18n.formatMessage('addresses.Address_Not_Found') })
 
         const addressSchema = schema.create({
             street: schema.string({}, [rules.minLength(4), rules.maxLength(255)]),
@@ -81,11 +81,11 @@ export default class AddressesController {
         if (!address)
             return response
                 .status(404)
-                .send({ error: i18n.formatMessage('user.Address_Not_Found') })
+                .send({ error: i18n.formatMessage('addresses.Address_Not_Found') })
 
         await address.merge({ deletedAt: DateTime.now() }).save()
         return response.status(200).send({
-            message: i18n.formatMessage('address.Address_Deleted_Successfully'),
+            message: i18n.formatMessage('addresses.Address_Deleted_Successfully'),
         })
     }
 }
