@@ -67,7 +67,10 @@ export default class AdminsController {
     }
 
     public async show({ response, params, i18n }: HttpContextContract) {
-        const user = await User.find(params.id)
+        const user = await User.query()
+            .where('id', params.id)
+            .whereNot('role', UserRole.Customer)
+            .first()
         if (!user) return response.notFound({ error: i18n.formatMessage('users.Admin_Not_Found') })
         return user
     }
@@ -135,8 +138,12 @@ export default class AdminsController {
     }
 
     public async delete({ response, params, auth, i18n }: HttpContextContract) {
-        console.log(auth.user?.role)
-        const user = await User.find(params.id)
+        const user = await User.query()
+            .where('id', params.id)
+            .whereNot('role', UserRole.Customer)
+            .preload('addresses')
+            .first()
+
         const ownersCount = await User.query().count('role', UserRole.Owner)
 
         if (!user)
