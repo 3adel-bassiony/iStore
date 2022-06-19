@@ -54,6 +54,7 @@ Route.group(async () => {
             Route.delete('/:id', 'CustomersController.delete')
         }).prefix('/customers')
 
+        // Products
         Route.group(() => {
             Route.get('/', 'ProductsController.index')
             Route.post('/', 'ProductsController.create')
@@ -62,6 +63,7 @@ Route.group(async () => {
             Route.delete('/:id', 'ProductsController.delete')
         }).prefix('/products')
 
+        // Collections
         Route.group(() => {
             Route.get('/', 'CollectionsController.index')
             Route.post('/', 'CollectionsController.create')
@@ -77,6 +79,14 @@ Route.group(async () => {
             Route.put('/:id', 'BrandsController.update')
             Route.delete('/:id', 'BrandsController.delete')
         }).prefix('/brands')
+
+        // Addresses
+        Route.group(() => {
+            Route.post('/', 'AddressesController.create')
+            Route.get('/:id', 'AddressesController.show')
+            Route.put('/:id', 'AddressesController.update')
+            Route.delete('/:id', 'AddressesController.delete')
+        }).prefix('/addresses')
     }).middleware('auth:api')
 })
     .prefix('/dashboard')

@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon'
+import Address from 'App/Models/Address'
 import Hash from '@ioc:Adonis/Core/Hash'
 
 import {
@@ -8,6 +9,8 @@ import {
     beforeFind,
     beforeFetch,
     ModelQueryBuilderContract,
+    hasMany,
+    HasMany,
 } from '@ioc:Adonis/Lucid/Orm'
 import { UserRole } from 'App/Enums/UserRole'
 
@@ -59,6 +62,9 @@ class User extends BaseModel {
 
     @column.dateTime({ serializeAs: null })
     public deletedAt: DateTime
+
+    @hasMany(() => Address)
+    public addresses: HasMany<typeof Address>
 
     @beforeFind()
     @beforeFetch()

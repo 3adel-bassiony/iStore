@@ -14,6 +14,16 @@ export default class CustomersController {
         return users
     }
 
+    public async show({ response, params, i18n }: HttpContextContract) {
+        const user = await User.query()
+            .where('id', params.id)
+            .where('role', UserRole.Customer)
+            .preload('addresses')
+            .first()
+        if (!user) return response.notFound({ error: i18n.formatMessage('user.User_Not_Found') })
+        return user
+    }
+
     public async create({ request, response }: HttpContextContract) {
         const userSchema = schema.create({
             name: schema.string(),
@@ -58,12 +68,6 @@ export default class CustomersController {
         } catch (error) {
             response.badRequest(error.messages)
         }
-    }
-
-    public async show({ response, params, i18n }: HttpContextContract) {
-        const user = await User.find(params.id)
-        if (!user) return response.notFound({ error: i18n.formatMessage('user.User_Not_Found') })
-        return user
     }
 
     public async update({ request, response, params, i18n }: HttpContextContract) {
