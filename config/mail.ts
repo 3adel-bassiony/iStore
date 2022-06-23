@@ -9,48 +9,47 @@ import Env from '@ioc:Adonis/Core/Env'
 import { mailConfig } from '@adonisjs/mail/build/config'
 
 export default mailConfig({
-  /*
-  |--------------------------------------------------------------------------
-  | Default mailer
-  |--------------------------------------------------------------------------
-  |
-  | The following mailer will be used to send emails, when you don't specify
-  | a mailer
-  |
-  */
-  mailer: 'mailgun',
-
-  /*
-  |--------------------------------------------------------------------------
-  | Mailers
-  |--------------------------------------------------------------------------
-  |
-  | You can define or more mailers to send emails from your application. A
-  | single `driver` can be used to define multiple mailers with different
-  | config.
-  |
-  | For example: Postmark driver can be used to have different mailers for
-  | sending transactional and promotional emails
-  |
-  */
-  mailers: {
+    /*
+    |--------------------------------------------------------------------------
+    | Default mailer
+    |--------------------------------------------------------------------------
+    |
+    | The following mailer will be used to send emails, when you don't specify
+    | a mailer
+    |
+    */
+    mailer: 'mailgun',
 
     /*
     |--------------------------------------------------------------------------
-    | Mailgun
+    | Mailers
     |--------------------------------------------------------------------------
     |
-		| Uses Mailgun service for sending emails.
+    | You can define or more mailers to send emails from your application. A
+    | single `driver` can be used to define multiple mailers with different
+    | config.
     |
-    | If you are using an EU domain. Ensure to change the baseUrl to hit the
-    | europe endpoint (https://api.eu.mailgun.net/v3).
+    | For example: Postmark driver can be used to have different mailers for
+    | sending transactional and promotional emails
     |
     */
-    mailgun: {
-      driver: 'mailgun',
-      baseUrl: 'https://api.mailgun.net/v3',
-      key: Env.get('MAILGUN_API_KEY'),
-      domain: Env.get('MAILGUN_DOMAIN'),
+    mailers: {
+        /*
+        |--------------------------------------------------------------------------
+        | Mailgun
+        |--------------------------------------------------------------------------
+        |
+        | Uses Mailgun service for sending emails.
+        |
+        | If you are using an EU domain. Ensure to change the baseUrl to hit the
+        | europe endpoint (https://api.eu.mailgun.net/v3).
+        |
+        */
+        mailgun: {
+            driver: 'mailgun',
+            baseUrl: 'https://api.mailgun.net/v3',
+            key: Env.get('MAILGUN_API_KEY'),
+            domain: Env.get('MAILGUN_DOMAIN'),
+        },
     },
-  },
 })
