@@ -88,6 +88,14 @@ Route.group(async () => {
             Route.put('/:id', 'AddressesController.update')
             Route.delete('/:id', 'AddressesController.delete')
         }).prefix('/addresses')
+
+        // Orders
+        Route.group(() => {
+            Route.get('/', 'OrdersController.index')
+            Route.post('/', 'OrdersController.create')
+            Route.get('/:id', 'OrdersController.show')
+            Route.delete('/:id', 'OrdersController.delete')
+        }).prefix('/orders')
     }).middleware('auth:api')
 })
     .prefix('/dashboard')

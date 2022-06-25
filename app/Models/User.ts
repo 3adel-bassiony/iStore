@@ -13,6 +13,7 @@ import {
     HasMany,
 } from '@ioc:Adonis/Lucid/Orm'
 import { UserRole } from 'App/Enums/UserRole'
+import Order from './Order'
 
 class User extends BaseModel {
     @column({ isPrimary: true })
@@ -65,6 +66,9 @@ class User extends BaseModel {
 
     @hasMany(() => Address)
     public addresses: HasMany<typeof Address>
+
+    @hasMany(() => Order)
+    public orders: HasMany<typeof Order>
 
     @beforeFind()
     @beforeFetch()

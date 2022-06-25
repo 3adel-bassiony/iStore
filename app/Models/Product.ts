@@ -93,6 +93,9 @@ export default class Product extends BaseModel {
     @belongsTo(() => Brand)
     public brand: BelongsTo<typeof Brand>
 
+    @manyToMany(() => Collection)
+    public collections: ManyToMany<typeof Collection>
+
     @beforeFind()
     @beforeFetch()
     public static ignoreDeleted = (query: ModelQueryBuilderContract<typeof Product>) => {
@@ -114,7 +117,4 @@ export default class Product extends BaseModel {
     public static async stringifyAttachments(product: Product) {
         product.attachments = await JSON.stringify(product.attachments)
     }
-
-    @manyToMany(() => Collection)
-    public collections: ManyToMany<typeof Collection>
 }

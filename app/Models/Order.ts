@@ -8,13 +8,16 @@ import {
     beforePaginate,
     belongsTo,
     BelongsTo,
-    hasMany,
-    HasMany,
+    manyToMany,
+    ManyToMany,
 } from '@ioc:Adonis/Lucid/Orm'
 import User from 'App/Models/User'
-import Order from './Order'
+import Address from './Address'
+import Product from './Product'
+import { OrderStatus } from 'App/Enums/OrderStatus'
+import OrderDetail from './OrderDetail'
 
-export default class Address extends BaseModel {
+export default class Order extends BaseModel {
     @column({ isPrimary: true })
     public id: number
 
@@ -22,28 +25,13 @@ export default class Address extends BaseModel {
     public userId: number
 
     @column()
-    public street: string
+    public addressId: number
 
     @column()
-    public building: string
+    public notes: string
 
     @column()
-    public floor: number
-
-    @column()
-    public apartment: string
-
-    @column()
-    public district: string
-
-    @column()
-    public government: string
-
-    @column()
-    public isCompany: boolean
-
-    @column()
-    public company: string
+    public status: OrderStatus
 
     @column.dateTime({ autoCreate: true })
     public createdAt: DateTime
@@ -57,19 +45,26 @@ export default class Address extends BaseModel {
     @belongsTo(() => User)
     public user: BelongsTo<typeof User>
 
-    @hasMany(() => Order)
-    public orders: HasMany<typeof Order>
+    @belongsTo(() => Address)
+    public address: BelongsTo<typeof Address>
+
+    @manyToMany(() => Product, {
+        pivotTable: 'order_products',
+        pivotColumns: ['quantity', 'price'],
+        pivotTimestamps: true,
+    })
+    public products: ManyToMany<typeof Product>
 
     @beforeFind()
     @beforeFetch()
-    public static ignoreDeleted = (query: ModelQueryBuilderContract<typeof Address>) => {
+    public static ignoreDeleted = (query: ModelQueryBuilderContract<typeof Order>) => {
         query.whereNull('deleted_at')
     }
 
     @beforePaginate()
     public static updatePagination([countQuery, query]: [
-        ModelQueryBuilderContract<typeof Address>,
-        ModelQueryBuilderContract<typeof Address>
+        ModelQueryBuilderContract<typeof Order>,
+        ModelQueryBuilderContract<typeof Order>
     ]) {
         query.whereNull('deleted_at')
         countQuery.whereNull('deleted_at')
